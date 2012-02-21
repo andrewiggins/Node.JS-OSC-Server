@@ -3,15 +3,18 @@ var express = require('express'),
     url = require('url'),
     app = express.createServer();
 
+var httpbinding_port = 8124,
+    oscbinding_ip = 'localhost', 
+    oscbinding_port = 11000,
+    server = new osc.Server(oscbinding_port, oscbinding_ip),
+    client = new osc.Client('localhost', 12000);
+
 app.use(express.logger());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(__dirname + '/static'));
-app.use(express.errorHandler());
-
-var server = new osc.Server(1100, 'localhost'),
-    client = new osc.Client('localhost', 12000);
+app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 
 var values = function (object) {
 	var result = [];
@@ -25,6 +28,9 @@ app.get('/*', function (request, response) {
   var path = reqobj.pathname;
 	var params = values(reqobj.query);
 
+	var message = new osc.Message(path, params);
+	server.send(message, client);
+
 	response.writeHead(200, {'Content-Type': 'text/plain'});
 
 	response.write(path);
@@ -34,5 +40,6 @@ app.get('/*', function (request, response) {
 	response.end();
 });
 
-console.log('Server running at http://localhost:8124/')
-app.listen(8124);
+console.log('OSC server listening on '+oscbinding_ip.toString()+':'+oscbinding_port.toString());
+console.log('HTTP server running at http://localhost:'+httpbinding_port.toString()+'/');
+app.listen(httpbinding_port);
