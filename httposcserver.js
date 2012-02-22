@@ -46,15 +46,20 @@ var values = function (object) {
 
 
 /***** Application Setup *****/
-app.use(express.logger());
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(express.static(__dirname + '/static'));
-app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
+app.configure(function() {
+	app.register('.html', require('ejs'));
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'ejs');
+	app.use(express.logger());
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
+	app.use(app.router);
+	app.use(express.static(__dirname + '/static'));
+	app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
+});
 
 /***** Routers *****/
-app.get('/*', function (request, response) {
+app.get('/_old', function (request, response) {
 	var reqobj = url.parse(request.url, true);
   var path = reqobj.pathname;
 	var params = values(reqobj.query);
@@ -69,6 +74,10 @@ app.get('/*', function (request, response) {
 	response.write(params.toString());
 
 	response.end();
+});
+
+app.get('/*', function (request, response) {
+	response.render('layout.html');
 });
 
 /***** Start *****/
