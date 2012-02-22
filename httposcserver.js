@@ -79,6 +79,12 @@ io.sockets.on('connection', function (websocket) {
 	});
 });
 
+/***** OSC Server Callbacks *****/
+oscServer.on('oscmessage', function(msg, rinfo) {
+	util = require('util');
+	console.log('Message from ' + msg.address + ': ' + util.inspect(msg.arguments));
+});
+
 /***** Start *****/
 console.log('OSC server listening on '+oscbinding_ip.toString()+':'+oscbinding_port.toString());
 console.log('HTTP server running at http://localhost:'+httpbinding_port.toString()+'/');
