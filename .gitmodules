@@ -1,0 +1,9 @@
+[submodule "osc4node"]
+	path = osc4node
+	url = https://andrewiggins@github.com/andrewiggins/osc4node.git
+[submodule "node_modules"]
+	path = node_modules
+	url = https://andrewiggins@github.com/andrewiggins/osc4node.git
+[submodule "node_modules/osc4node"]
+	path = node_modules/osc4node
+	url = https://andrewiggins@github.com/andrewiggins/osc4node.git
