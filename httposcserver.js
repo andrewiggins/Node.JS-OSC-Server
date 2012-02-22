@@ -33,8 +33,8 @@ var app = express.createServer(),
     httpbinding_port = 8124,
     oscbinding_ip = 'localhost', 
     oscbinding_port = 11000,
-    server = new osc.Server(oscbinding_port, oscbinding_ip),
-    client = new osc.Client('localhost', 12000),
+    oscServer = new osc.Server(oscbinding_port, oscbinding_ip),
+    oscClient = new osc.Client('localhost', 12000),
     io = socket.listen(app);
 
 var values = function (object) {
@@ -66,9 +66,17 @@ app.get('/*', function (request, response) {
 	params = (params.length > 1) ? params : ['']
 
 	var message = new osc.Message(path, params);
-	server.send(message, client);
+	oscServer.send(message, oscClient);
 
 	response.render('layout.html');
+});
+
+/***** WebSocket Callbacks *****/
+io.sockets.on('connection', function (websocket) {
+	websocket.on('send', function(msg) {
+		oscmsg = new osc.Message(msg.address, msg.values);
+		oscServer.send(oscmsg, oscClient);
+	});
 });
 
 /***** Start *****/
