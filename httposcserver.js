@@ -53,8 +53,8 @@ app.configure(function() {
 	app.use(express.logger());
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(app.router);
 	app.use(express.static(__dirname + '/static'));
+	app.use(app.router);
 	app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 });
 
