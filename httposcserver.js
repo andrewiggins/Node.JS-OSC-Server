@@ -1,13 +1,15 @@
 var express = require('express'),
     osc = require('osc4node'),
     url = require('url'),
+    socket = require('socket.io'),
     app = express.createServer();
 
 var httpbinding_port = 8124,
     oscbinding_ip = 'localhost', 
     oscbinding_port = 11000,
     server = new osc.Server(oscbinding_port, oscbinding_ip),
-    client = new osc.Client('localhost', 12000);
+    client = new osc.Client('localhost', 12000),
+    io = socket.listen(app);
 
 app.use(express.logger());
 app.use(express.bodyParser());
