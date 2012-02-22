@@ -1,3 +1,8 @@
-#messages p:last {
+#messages p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#messages p:last-child {
   font-weight: bold;
 }
