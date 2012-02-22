@@ -63,6 +63,7 @@ app.get('/*', function (request, response) {
 	var reqobj = url.parse(request.url, true);
   var path = reqobj.pathname;
 	var params = values(reqobj.query);
+	params = (params.length > 1) ? params : ['']
 
 	var message = new osc.Message(path, params);
 	server.send(message, client);
