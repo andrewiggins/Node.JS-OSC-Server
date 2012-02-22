@@ -24,12 +24,27 @@
 #-------------------------------------------------------------------------------
 
 import OSC
+import time
+import thread
+import random
 
 ip = ''
 port = 12000
 server = OSC.OSCServer((ip, port))
 server.addMsgHandler('default', server.msgPrinter_handler)
 
+remote_ip = 'localhost'
+remote_port = 11000
+client = OSC.OSCClient()
+client.connect((remote_ip, remote_port))
+
 if __name__ == '__main__':
 	print "Server listening on " + str(port)
-	server.serve_forever()
+	thread.start_new_thread(server.serve_forever, ())
+
+	while True:
+		msg = OSC.OSCMessage('/random', random.randint(1, 100))
+		print "Sending {}: {}".format(msg.address, msg.values())
+		client.send(msg)
+
+		time.sleep(2)
