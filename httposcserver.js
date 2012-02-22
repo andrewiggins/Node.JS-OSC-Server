@@ -59,7 +59,7 @@ app.configure(function() {
 });
 
 /***** Routers *****/
-app.get('/_old', function (request, response) {
+app.get('/*', function (request, response) {
 	var reqobj = url.parse(request.url, true);
   var path = reqobj.pathname;
 	var params = values(reqobj.query);
@@ -67,16 +67,6 @@ app.get('/_old', function (request, response) {
 	var message = new osc.Message(path, params);
 	server.send(message, client);
 
-	response.writeHead(200, {'Content-Type': 'text/plain'});
-
-	response.write(path);
-	response.write('\n');
-	response.write(params.toString());
-
-	response.end();
-});
-
-app.get('/*', function (request, response) {
 	response.render('layout.html');
 });
 
