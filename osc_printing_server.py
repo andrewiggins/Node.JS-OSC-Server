@@ -47,4 +47,4 @@ if __name__ == '__main__':
 		print "Sending {}: {}".format(msg.address, msg.values())
 		client.send(msg)
 
-		time.sleep(2)
+		time.sleep(5)

@@ -26,7 +26,8 @@
 var express = require('express'),
     osc = require('osc4node'),
     url = require('url'),
-    socket = require('socket.io');
+    socket = require('socket.io'),
+		util = require('util');
 
 /***** Globals *****/
 var app = express.createServer(),
@@ -74,6 +75,7 @@ app.get('/*', function (request, response) {
 /***** WebSocket Callbacks *****/
 io.sockets.on('connection', function (websocket) {
 	websocket.on('send', function(msg) {
+		console.log('Sending ' + util.inspect(msg));
 		oscmsg = new osc.Message(msg.address, msg.values);
 		oscServer.send(oscmsg, oscClient);
 	});
@@ -81,7 +83,6 @@ io.sockets.on('connection', function (websocket) {
 
 /***** OSC Server Callbacks *****/
 oscServer.on('oscmessage', function(msg, rinfo) {
-	util = require('util');
 	console.log('Message from ' + msg.address + ': ' + util.inspect(msg.arguments));
 });
 
