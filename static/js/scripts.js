@@ -40,7 +40,7 @@ $(function() {
 	});
 
 	$('#sender').submit(function () {
-		if (!$send.hasAttr('disabled'))
+		if ($send.attr('disabled') == undefined) {
 			var msg = {};
 			msg.address = location.pathname;
 			msg.values = [$('#text').val()];
@@ -48,6 +48,7 @@ $(function() {
 			socket.emit('send', msg);	
 
 			$('#text').val('');
+		}
 
 		return false;
 	});
