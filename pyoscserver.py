@@ -27,6 +27,10 @@ import time
 import thread
 import random
 
+def rm_addr(addr, tags, data, client_addr):
+	print "OSCMessage '{}': {}".format(addr, str(data))
+	addresses.remove(data[0])
+
 def add_addr(addr, tags, data, client_addr):
 	print "OSCMessage '{}': {}".format(addr, str(data))
 	addresses.add(addr)
@@ -34,6 +38,7 @@ def add_addr(addr, tags, data, client_addr):
 ip = ''
 port = 12000
 server = OSC.OSCServer((ip, port))
+server.addMsgHandler('/disconnect', rm_addr)
 server.addMsgHandler('default', add_addr)
 
 remote_ip = 'localhost'

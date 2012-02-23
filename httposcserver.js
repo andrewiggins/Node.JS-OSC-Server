@@ -85,6 +85,13 @@ io.sockets.on('connection', function (websocket) {
 		oscServer.send(oscmsg, oscClient);
 	});
 
+	websocket.on('disconnect', function() {
+		websocket.get('addr', function(err, addr) {
+			oscmsg = new osc.Message('/disconnect', [addr]);
+			oscServer.send(oscmsg, oscClient);
+		});
+	});
+
 	/***** OSC Server Callbacks *****/
 	oscServer.on('oscmessage', function(msg, rinfo) {
 		websocket.get('addr', function(err, addr) {
