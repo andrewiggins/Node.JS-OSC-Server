@@ -74,6 +74,11 @@ app.get('/*', function (request, response) {
 
 /***** WebSocket Callbacks *****/
 io.sockets.on('connection', function (websocket) {
+	websocket.on('config', function(msg, callback) {
+		console.log("Websocket "+msg+" connected!");
+		websocket.set('addr', msg, callback('ready'));
+	});
+
 	websocket.on('send', function(msg) {
 		console.log('Sending ' + util.inspect(msg));
 		oscmsg = new osc.Message(msg.address, msg.values);

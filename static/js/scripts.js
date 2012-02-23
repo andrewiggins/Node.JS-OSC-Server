@@ -23,20 +23,32 @@
  ***************************************************************************/
 
 $(function() {
+	var $send = $('#send').attr('disabled', 'disabled');
 	var socket = io.connect('http://localhost');
+
+	socket.on('connect', function() {
+		socket.emit('config', location.pathname, function(status) {
+			if (status = 'ready')
+				$send.removeAttr('disabled');
+			else
+				$('body').css({'background-color': 'red'});
+		});
+	});
 
 	socket.on('oscmessage', function(msg) {
 		$('#messages').prepend('<p>'+msg.address+': '+msg.value+'</p>');
 	});
 
 	$('#sender').submit(function () {
-		var msg = {};
-		msg.address = location.pathname;
-		msg.values = [$('#text').val()];
-		
-		socket.emit('send', msg);	
+		if (!$send.hasAttr('disabled'))
+			var msg = {};
+			msg.address = location.pathname;
+			msg.values = [$('#text').val()];
+			
+			socket.emit('send', msg);	
 
-		$('#text').val('');
+			$('#text').val('');
+
 		return false;
 	});
 });
