@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
 # Name:        printing_server.py
-# Purpose:     An OSC server that listens on localhost:3333 and prints any
-#              any message it receives
+# Purpose:     An OSC server to test httposcserver.js
 #
 # Author(s):   Andre Wiggins
 #
@@ -28,23 +27,32 @@ import time
 import thread
 import random
 
+def add_addr(addr, tags, data, client_addr):
+	print "OSCMessage '{}': {}".format(addr, str(data))
+	addresses.add(addr)
+
 ip = ''
 port = 12000
 server = OSC.OSCServer((ip, port))
-server.addMsgHandler('default', server.msgPrinter_handler)
+server.addMsgHandler('default', add_addr)
 
 remote_ip = 'localhost'
 remote_port = 11000
 client = OSC.OSCClient()
 client.connect((remote_ip, remote_port))
 
+addresses = set(['/broadcast'])
+
 if __name__ == '__main__':
 	print "Server listening on " + str(port)
 	thread.start_new_thread(server.serve_forever, ())
 
 	while True:
-		msg = OSC.OSCMessage('/random', random.randint(1, 100))
-		print "Sending {}: {}".format(msg.address, msg.values())
-		client.send(msg)
+		print '~'*20
+		for addr in addresses:
+			msg = OSC.OSCMessage(addr, random.randint(1, 100))
+			print "Sending {}: {}".format(msg.address, msg.values())
+			client.send(msg)
+		print '~'*20
 
 		time.sleep(5)
