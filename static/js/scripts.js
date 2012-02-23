@@ -25,6 +25,10 @@
 $(function() {
 	var socket = io.connect('http://localhost');
 
+	socket.on('oscmessage', function(msg) {
+		$('#messages').append('<p>'+msg.value+'</p>');
+	});
+
 	$('#sender').submit(function () {
 		var msg = {};
 		msg.address = location.pathname;

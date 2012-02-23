@@ -31,7 +31,7 @@ var express = require('express'),
 
 /***** Globals *****/
 var app = express.createServer(),
-    httpbinding_port = 8124,
+    httpbinding_port = 80,
     oscbinding_ip = 'localhost', 
     oscbinding_port = 11000,
     oscServer = new osc.Server(oscbinding_port, oscbinding_ip),
@@ -79,11 +79,13 @@ io.sockets.on('connection', function (websocket) {
 		oscmsg = new osc.Message(msg.address, msg.values);
 		oscServer.send(oscmsg, oscClient);
 	});
-});
 
-/***** OSC Server Callbacks *****/
-oscServer.on('oscmessage', function(msg, rinfo) {
-	console.log('Message from ' + msg.address + ': ' + util.inspect(msg.arguments));
+	/***** OSC Server Callbacks *****/
+	oscServer.on('oscmessage', function(msg, rinfo) {
+		console.log('Message from ' + msg.address + ': ' + util.inspect(msg.arguments));
+		websocket.emit('oscmessage', {value: msg.arguments[0].value});
+	});
+
 });
 
 /***** Start *****/
