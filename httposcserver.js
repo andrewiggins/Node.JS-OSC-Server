@@ -83,7 +83,7 @@ io.sockets.on('connection', function (websocket) {
 	/***** OSC Server Callbacks *****/
 	oscServer.on('oscmessage', function(msg, rinfo) {
 		console.log('Message from ' + msg.address + ': ' + util.inspect(msg.arguments));
-		websocket.emit('oscmessage', {value: msg.arguments[0].value});
+		websocket.emit('oscmessage', {address: msg.address, value: msg.arguments[0].value});
 	});
 
 });
