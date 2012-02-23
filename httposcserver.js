@@ -75,7 +75,7 @@ app.get('/*', function (request, response) {
 /***** WebSocket Callbacks *****/
 io.sockets.on('connection', function (websocket) {
 	websocket.on('config', function(msg, callback) {
-		console.log("Websocket "+msg+" connected!");
+		console.log("Websocket "+msg+" ("+websocket.id+") connected!");
 		websocket.set('addr', msg, callback('ready'));
 	});
 
@@ -87,6 +87,7 @@ io.sockets.on('connection', function (websocket) {
 
 	websocket.on('disconnect', function() {
 		websocket.get('addr', function(err, addr) {
+			console.log("sending /disconnect to "+addr+" (" + websocket.id+")");
 			oscmsg = new osc.Message('/disconnect', [addr]);
 			oscServer.send(oscmsg, oscClient);
 		});
