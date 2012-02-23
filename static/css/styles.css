@@ -3,6 +3,6 @@
 	margin-bottom: 0px;
 }
 
-#messages p:last-child {
+#messages p:first-child {
   font-weight: bold;
 }
