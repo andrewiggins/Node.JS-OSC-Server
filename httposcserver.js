@@ -87,10 +87,16 @@ io.sockets.on('connection', function (websocket) {
 
 	/***** OSC Server Callbacks *****/
 	oscServer.on('oscmessage', function(msg, rinfo) {
-		console.log('Message for ' + msg.address + ': ' + util.inspect(msg.arguments));
-		websocket.emit('oscmessage', {address: msg.address, value: msg.arguments[0].value});
+		websocket.get('addr', function(err, addr) {
+			if (msg.address == addr || msg.address == '/broadcast')
+				websocket.emit('oscmessage', {address: msg.address, value: msg.arguments[0].value});
+		});
 	});
 
+});
+
+oscServer.on('oscmessage', function(msg, rinfo) {
+	console.log('Message for ' + msg.address + ': ' + util.inspect(msg.arguments));
 });
 
 /***** Start *****/
