@@ -45,7 +45,6 @@ var values = function (object) {
 	return result;
 }
 
-
 /***** Application Setup *****/
 app.configure(function() {
 	app.register('.html', require('ejs'));

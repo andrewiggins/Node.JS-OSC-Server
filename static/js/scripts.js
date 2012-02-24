@@ -24,7 +24,7 @@
 
 $(function() {
 	var $send = $('#send').attr('disabled', 'disabled');
-	var socket = io.connect('http://localhost');
+	var socket = io.connect(location.origin);
 
 	socket.on('connect', function() {
 		socket.emit('config', location.pathname, function(status) {
