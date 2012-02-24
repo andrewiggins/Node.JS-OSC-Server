@@ -5,16 +5,13 @@
 	<title>Login</title>
 	<meta name="description" content="Login to OSC Server Forwarder" />
 	<meta name="author" content="Andre Wiggins" />
-
-	<script src="js/jquery-1.7.1.js"></script>
-	<script src="js/login.js"></script>
 </head>
 <body>
 	<header>
 	</header>
 	<section>
-		<form action="" method="get" id="login">
-			Username: <input type="text" name="username" id="username" />
+		<form action="/login" method="get" id="login">
+			Username: <input name="username" type="text" id="username" />
 			<input type="submit" id="submit" />
 		</form>
 	</section>

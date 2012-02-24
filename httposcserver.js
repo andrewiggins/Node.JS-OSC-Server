@@ -61,18 +61,18 @@ app.configure(function() {
 
 /***** Routers *****/
 app.get('/', function (request, response) {
-	var reqobj = url.parse(request.url, true);
-  var path = reqobj.pathname;
-	var params = values(reqobj.query);
-	params = (params.length > 1) ? params : ['']
-
-	var message = new osc.Message(path, params);
-	oscServer.send(message, oscClient);
-
 	response.render('login.html');
 });
 
+app.get('/login', function (request, response) {
+	var params = url.parse(request.url, true).query;
+	response.redirect('/'+params.username);
+});
+
 app.get('/:userid', function (request, response) {
+	var message = new osc.Message('/'+request.params.userid, [""]);
+	oscServer.send(message, oscClient);
+
 	response.render('user.html');
 });
 
