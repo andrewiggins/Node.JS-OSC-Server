@@ -59,6 +59,10 @@ app.configure(function() {
 	app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 });
 
+io.configure(function() {
+	io.set('browser client minification', true);
+});
+
 /***** Routers *****/
 app.get('/', function (request, response) {
 	response.render('login.html');
@@ -91,9 +95,11 @@ io.sockets.on('connection', function (websocket) {
 
 	websocket.on('disconnect', function() {
 		websocket.get('addr', function(err, addr) {
-			console.log("sending /disconnect to "+addr+" (" + websocket.id+")");
-			oscmsg = new osc.Message('/disconnect', [addr]);
-			oscServer.send(oscmsg, oscClient);
+			if (addr != null) {
+				console.log("sending /disconnect to "+addr+" (" + websocket.id+")");
+				oscmsg = new osc.Message('/disconnect', [addr]);
+				oscServer.send(oscmsg, oscClient);
+			}
 		});
 	});
 

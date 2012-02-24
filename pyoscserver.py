@@ -29,7 +29,8 @@ import random
 
 def rm_addr(addr, tags, data, client_addr):
 	print "OSCMessage '{}': {}".format(addr, str(data))
-	addresses.remove(data[0])
+	if data[0] in addresses:
+		addresses.remove(data[0])
 
 def add_addr(addr, tags, data, client_addr):
 	print "OSCMessage '{}': {}".format(addr, str(data))
