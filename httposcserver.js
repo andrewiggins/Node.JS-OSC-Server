@@ -50,6 +50,7 @@ app.configure(function() {
 	app.register('.html', require('ejs'));
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs');
+	app.set('view options', {layout: false});
 	app.use(express.logger());
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
@@ -59,7 +60,7 @@ app.configure(function() {
 });
 
 /***** Routers *****/
-app.get('/*', function (request, response) {
+app.get('/', function (request, response) {
 	var reqobj = url.parse(request.url, true);
   var path = reqobj.pathname;
 	var params = values(reqobj.query);
@@ -68,7 +69,11 @@ app.get('/*', function (request, response) {
 	var message = new osc.Message(path, params);
 	oscServer.send(message, oscClient);
 
-	response.render('layout.html');
+	response.render('login.html');
+});
+
+app.get('/:userid', function (request, response) {
+	response.render('user.html');
 });
 
 /***** WebSocket Callbacks *****/
