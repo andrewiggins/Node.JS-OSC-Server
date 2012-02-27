@@ -42,10 +42,20 @@ server = OSC.OSCServer((ip, port))
 server.addMsgHandler('/disconnect', rm_addr)
 server.addMsgHandler('default', add_addr)
 
+clients = []
+
 remote_ip = 'localhost'
 remote_port = 11000
-client = OSC.OSCClient()
-client.connect((remote_ip, remote_port))
+local_client = OSC.OSCClient()
+local_client.connect((remote_ip, remote_port))
+clients.append(local_client)
+
+remote_client_ip = '173.253.164.143'
+remote_client_port = 11000
+remote_client = OSC.OSCClient()
+remote_client.connect((remote_client_ip, remote_client_port));
+clients.append(remote_client)
+
 
 addresses = set(['/broadcast'])
 
@@ -56,9 +66,11 @@ if __name__ == '__main__':
 	while True:
 		print '~'*20
 		for addr in addresses:
-			msg = OSC.OSCMessage(addr, random.randint(1, 100))
+			#msg = OSC.OSCMessage(addr, random.randint(1, 100))
+			msg = OSC.OSCMessage(addr, [3])
 			print "Sending {}: {}".format(msg.address, msg.values())
-			client.send(msg)
+			for client in clients:
+				client.send(msg)
 		print '~'*20
 
-		time.sleep(5)
+		time.sleep(2)
